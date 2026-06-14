@@ -36,8 +36,9 @@ html,body{height:100%;width:100%;background:#000 !important;overflow:hidden;font
 .key.func.pressed{background:#a8a8ac;}
 .key.op.pressed{background:#fcc069;}
 .key svg{width:min(8vw,34px);height:min(8vw,34px);stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;}
-#armdot{position:fixed;left:7px;bottom:7px;width:8px;height:8px;border-radius:50%;background:#ff9f0a;opacity:0;transition:opacity .1s;pointer-events:none;z-index:99;}
-#armdot.on{opacity:.16;}
+#armdot{position:fixed;left:8px;bottom:8px;width:9px;height:9px;border-radius:50%;background:#ff9f0a;opacity:0;transition:opacity .12s,transform .12s;pointer-events:none;z-index:99;transform:scale(.7);}
+#armdot.on{opacity:.5;transform:scale(1);}
+#armdot.flash{opacity:.95;transform:scale(1.4);}
 
 /* function menu */
 #menu{position:fixed;top:64px;right:18px;width:330px;max-width:80vw;background:rgba(40,40,43,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:14px;padding:6px;z-index:40;display:none;box-shadow:0 10px 40px rgba(0,0,0,.5);}
@@ -126,7 +127,7 @@ html,body{height:100%;width:100%;background:#000 !important;overflow:hidden;font
     <label>Nova senha (opcional)</label>
     <input id="newpin" type="tel" inputmode="numeric" placeholder="deixe em branco p/ manter">
     <div class="btns"><button id="save">Salvar</button><button id="close2">Fechar</button></div>
-    <div class="hint">ARMAR: TOQUE no ícone do relógio (pontinho laranja acende). Segurar o relógio ~1s = histórico.<br>O app calcula sozinho a parcela-ponte; a conta fica verdadeira.<br>Estes ajustes: SEGURE o ícone de cima à direita ~1s. Toque curto nele = menu.</div>
+    <div class="hint">ARMAR: toque 2x no VISOR (área dos números, acima dos botões). Um pontinho laranja discreto acende no canto inferior esquerdo. Toque no relógio = histórico.<br>O app calcula sozinho a parcela-ponte; a conta fica verdadeira.<br>Estes ajustes: SEGURE o ícone de cima à direita ~1s. Toque curto nele = menu.</div>
   </div>
   <div id="msg"></div>
 </div>
@@ -140,7 +141,7 @@ html,body{height:100%;width:100%;background:#000 !important;overflow:hidden;font
   var tokens=[], afterEq=false, grayExpr='', bigResult='0', armed=false;
   var forcing=false, fDigits='', fIdx=0;
   var exprBox=document.getElementById('expr'),resBox=document.getElementById('result'),etext=document.getElementById('etext'),rtext=document.getElementById('rtext');
-  var dot=document.getElementById('armbadge'), clr=document.getElementById('clr');
+  var dot=document.getElementById('armdot'), clr=document.getElementById('clr');
   var OPS={add:'+',sub:'−',mul:'×',div:'÷'};
 
   // ---- history ----
@@ -315,8 +316,13 @@ html,body{height:100%;width:100%;background:#000 !important;overflow:hidden;font
   };
 
   // wire icons: clock => tap:history / hold:arm ; sci => tap:menu / hold:settings
-  setupHold(document.getElementById('histBtn'), function(){setArmed(!armed);}, openHist);
+  setupHold(document.getElementById('histBtn'), openHist, openHist);
   setupHold(document.getElementById('sciBtn'), openMenu, openCfg);
+  // duplo-toque no VISOR (área dos números) arma/desarma
+  var _lastTap=0;
+  document.querySelector('.display').addEventListener('click',function(){
+    var t=Date.now(); if(t-_lastTap<350){setArmed(!armed);_lastTap=0;} else {_lastTap=t;}
+  });
 
   render();
 })();

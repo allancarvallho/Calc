@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Calculadora">
+<meta name="color-scheme" content="dark">
+<title>Calculadora</title>
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAEJElEQVR4nO3dMW7bWBQF0Mkg5cBVJtvKbGaqACkCpJrNxOtKZ2QBKQwMhEgXpvgfn/4nzikNUzcgr75okXx59+HDxz/glj8f/Q9gXspBpBxEykGkHETKQaQcRMpBpBxEykGkHETKQaQcRMpBpBxE78tf8enpqfw12ejl5aXw1SrLoRYP93oIqipS9rGiGfOoOhY15dCM2ZQcESekRAXlsGzMafy4WDmIlINIOYiUg0g5iJSDSDmIlINIOYiUg0g5iJSDSDmIlIOooBy19y1SZfy4WDmIasph8ZhNyREpWzn0Yx5Vx6Ly0YTXf5O7Bh9o3udWXllCTsMJKZFyECkHkXIQKQeRchApB5FyENV/Cfabr1+/Xf/wy5fPq2c1x/347+f1D//+968jsv737rj/xuvmvrtUuB87s5rjbtbi0nEVOaQcb+67S4P7sTOrOe7NWlw6oiL15xx37b4dv/+orOa4u5qx4/e3KC7Hvt0x/1bNcfuOdHk//LVCVFmOVT4gdmzbGTeyANQuHlYOorJyDJ7r3fUKnVnNceNv/cLFw8pBpBxEykGkHETKQVRWjvHLFttfoTOrOW78EknhRRYrB1FlOUbeYfdu25nVHDfy1q+9NmvlICoux7532PxbNcftWwDKb+moXzlm/oAYPLXsjLv3SB9xs4/bBGePO9ttgpfcYFzibDcYszp/rRApB5FyECkHkXIQKQeRchAd/pT9p0//XP/w+fn76lnNcWf7EuzmvrtUuB87s5rjHvj1+VEfK2/uvo2/M1tWc9yWh1COeIT6Vf3KsWO/7H6fdWY1x+045Atcsuc0isuxbzmdf6vmuBOOYBj5oL13286s5jhP2bOAsnKMn59vf4XOrOY4T9mzBuUgUg4i5SBSDiLlICorx/h1yO2v0JnVHGcEA2uoLMfIO+zebTuzmuNOO4Jh306cf6vmuNM+Zc9pHHWb4MarCSW303VmNcdtvFBy0J2CR60cW3ZN1dHqzGqO23LUFx7B4O7zEme7+5zVOSElUg4i5SBSDiLlIFIOIuUgMoJhjbizfQlmBEMJIxiWyWqOM4LBCIYbjGBgakYwzBhnBMPQtkYwlG97zccKkREMc8UZwcAalINIOYiUg0g5iJSDyAiGueKMYGANRjBMF2cEw2JbNccZwcDsjGCYOs4IhpWymuOMYFgyqznubHefszonpETKQaQcRMpBpBxEykGkHERGMKwRd7YvwYxgKGEEwzJZzXFGMBjBcIMRDEzNCIYZ44xgGNrWCIbyba/5WCEygmGuOCMYWINyECkHkXIQKQeRchAZwTBXnBEMrMEIhunijGBYbKvmOCMYmJ0RDFPHGcGwUlZznBEMS2Y1x53t7nNW54SUSDmIlINIOYiUg0g5iJSDSDmIlINIOYiUg0g5iJSDSDmIfgGYKpduUn7ewwAAAABJRU5ErkJggg==">
+<style>
+:root{ --num:#333; --funcdark:#5a5a5e; --op:#ff9f0a; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;}
+html,body{height:100%;width:100%;background:#000 !important;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}
+#bg{position:fixed;inset:0;background:#000;z-index:-1;}
+.app{height:100vh;height:100dvh;display:flex;flex-direction:column;background:#000;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 22px 0;position:relative;z-index:5;}
+.iconbtn{position:relative;width:46px;height:46px;border-radius:50%;background:#1c1c1e;display:flex;align-items:center;justify-content:center;}
+.iconbtn svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.7;}
+#armbadge{position:absolute;top:1px;right:1px;width:11px;height:11px;border-radius:50%;background:#ff9f0a;opacity:0;transition:opacity .15s,transform .15s;box-shadow:0 0 0 2px #1c1c1e;transform:scale(.6);}
+#armbadge.on{opacity:.85;transform:scale(1);}
+#armbadge.flash{opacity:1;transform:scale(1.35);}
+.display{flex:1;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;padding:0 26px 10px;overflow:hidden;min-height:120px;}
+#expr{display:flex;justify-content:flex-end;align-items:flex-end;width:100%;overflow:hidden;min-height:46px;color:rgba(255,255,255,.5);font-weight:300;font-size:40px;line-height:1.1;letter-spacing:-1px;}
+#result{display:flex;justify-content:flex-end;align-items:flex-end;width:100%;overflow:hidden;color:#fff;font-weight:300;line-height:1.05;letter-spacing:-2px;font-size:min(13vw,50px);}
+#etext,#rtext{white-space:nowrap;}
+#result.faded,#expr.faded{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 38px);mask-image:linear-gradient(to right,transparent 0,#000 38px);}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:center;padding:0 14px 14px;background:#000;}
+.row{display:contents;}
+.key{aspect-ratio:1;width:100%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:min(9vw,40px);font-weight:400;color:#fff;background:var(--num);transition:transform .14s ease,background-color .08s ease;}
+.key.func{background:#6e6e73;font-size:min(7.5vw,34px);}
+.key.op{background:var(--op);font-size:min(10vw,46px);}
+.key.pressed{transform:scale(1.08);background:#737373;}
+.key.func.pressed{background:#a8a8ac;}
+.key.op.pressed{background:#fcc069;}
+.key svg{width:min(8vw,34px);height:min(8vw,34px);stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;}
+#armdot{position:fixed;left:7px;bottom:7px;width:8px;height:8px;border-radius:50%;background:#ff9f0a;opacity:0;transition:opacity .1s;pointer-events:none;z-index:99;}
+#armdot.on{opacity:.16;}
+
+/* function menu */
+#menu{position:fixed;top:64px;right:18px;width:330px;max-width:80vw;background:rgba(40,40,43,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:14px;padding:6px;z-index:40;display:none;box-shadow:0 10px 40px rgba(0,0,0,.5);}
+#menu.show{display:block;}
+.mitem{display:flex;align-items:center;gap:14px;padding:13px 12px;color:#fff;font-size:19px;border-radius:9px;}
+.mitem:active{background:rgba(255,255,255,.08);}
+.mitem .chk{width:20px;color:#fff;font-size:16px;}
+.mitem .ic{width:26px;text-align:center;color:#fff;font-size:17px;}
+.msep{height:1px;background:rgba(255,255,255,.12);margin:5px 12px;}
+#menuback{position:fixed;inset:0;z-index:39;display:none;}
+#menuback.show{display:block;}
+
+/* history sheet */
+#hist{position:fixed;inset:0;background:#0a0a0a;z-index:60;display:none;flex-direction:column;padding:env(safe-area-inset-top) 0 0;}
+#hist.show{display:flex;}
+.htop{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 10px;}
+.editbtn{background:#1c1c1e;color:#fff;padding:10px 20px;border-radius:20px;font-size:17px;border:none;}
+.xbtn{width:46px;height:46px;border-radius:50%;background:#1c1c1e;color:#fff;border:none;font-size:22px;}
+.hlist{flex:1;overflow-y:auto;padding:0 22px 40px;-webkit-overflow-scrolling:touch;}
+.hsec{color:#8e8e93;font-size:21px;font-weight:400;margin:18px 0 6px;}
+.hrow{padding:14px 0;border-top:1px solid rgba(255,255,255,.08);}
+.hexpr{color:#8e8e93;font-size:19px;}
+.hres{color:#fff;font-size:30px;font-weight:400;margin-top:2px;}
+
+/* settings */
+#cfg{position:fixed;inset:0;background:#000;z-index:70;display:none;flex-direction:column;padding:calc(env(safe-area-inset-top) + 30px) 26px 26px;}
+#cfg.show{display:flex;}
+#cfg h2{color:#fff;font-size:24px;font-weight:600;margin-bottom:18px;}
+#cfg label{color:#8e8e93;font-size:13px;text-transform:uppercase;letter-spacing:1px;margin:16px 0 7px;display:block;}
+#cfg input{width:100%;background:#1c1c1e;border:none;border-radius:12px;padding:15px;color:#fff;font-size:20px;outline:none;}
+#cfg .btns{margin-top:26px;display:flex;gap:12px;}
+#cfg button{flex:1;padding:15px;border:none;border-radius:12px;font-size:17px;font-weight:600;}
+#save{background:var(--op);color:#000;}
+#close,#close2{background:#1c1c1e;color:#fff;}
+#msg{color:#ff9f0a;font-size:14px;margin-top:14px;min-height:18px;}
+.hint{color:#636366;font-size:12px;line-height:1.6;margin-top:16px;}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div class="app">
+  <div class="topbar">
+    <div class="iconbtn" id="histBtn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="armbadge"></span></div>
+    <div class="iconbtn" id="sciBtn"><svg viewBox="0 0 24 24"><rect x="5.5" y="2.5" width="13" height="19" rx="3"/><rect x="8" y="5" width="8" height="3.5" rx="1"/><circle cx="8.7" cy="12.5" r="1" fill="#fff" stroke="none"/><circle cx="12" cy="12.5" r="1" fill="#fff" stroke="none"/><circle cx="15.3" cy="12.5" r="1" fill="#fff" stroke="none"/><circle cx="8.7" cy="15.8" r="1" fill="#fff" stroke="none"/><circle cx="12" cy="15.8" r="1" fill="#fff" stroke="none"/><circle cx="15.3" cy="15.8" r="1" fill="#fff" stroke="none"/><circle cx="8.7" cy="19" r="1" fill="#fff" stroke="none"/><circle cx="12" cy="19" r="1" fill="#fff" stroke="none"/><circle cx="15.3" cy="19" r="1" fill="#fff" stroke="none"/></svg></div>
+  </div>
+  <div class="display"><div id="expr"><span id="etext"></span></div><div id="result"><span id="rtext">0</span></div></div>
+  <div class="pad">
+    <div class="row">
+      <div class="key func" data-k="back"><svg viewBox="0 0 24 24"><path d="M21 5H8.5L3 12l5.5 7H21z"/><path d="M11 9.5l5 5M16 9.5l-5 5"/></svg></div>
+      <div class="key func" id="clr" data-k="clear">AC</div>
+      <div class="key func" data-k="pct">%</div>
+      <div class="key op" data-k="div">÷</div>
+    </div>
+    <div class="row"><div class="key" data-k="7">7</div><div class="key" data-k="8">8</div><div class="key" data-k="9">9</div><div class="key op" data-k="mul">×</div></div>
+    <div class="row"><div class="key" data-k="4">4</div><div class="key" data-k="5">5</div><div class="key" data-k="6">6</div><div class="key op" data-k="sub">−</div></div>
+    <div class="row"><div class="key" data-k="1">1</div><div class="key" data-k="2">2</div><div class="key" data-k="3">3</div><div class="key op" data-k="add">+</div></div>
+    <div class="row"><div class="key" data-k="sign">⁺∕₋</div><div class="key" data-k="0">0</div><div class="key" data-k="comma">,</div><div class="key op" data-k="eq">=</div></div>
+  </div>
+</div>
+<div id="armdot"></div>
+
+<div id="menuback"></div>
+<div id="menu">
+  <div class="mitem"><span class="chk">✓</span><span class="ic">⌗</span><span>Básica</span></div>
+  <div class="mitem"><span class="chk"></span><span class="ic">ƒ</span><span>Científica</span></div>
+  <div class="mitem"><span class="chk"></span><span class="ic">✎</span><span>Notas de Cálculo</span></div>
+  <div class="msep"></div>
+  <div class="mitem"><span class="chk"></span><span class="ic">⇄</span><span>Conversão</span></div>
+</div>
+
+<div id="hist">
+  <div class="htop"><button class="editbtn" id="editBtn">Editar</button><button class="xbtn" id="histX">✕</button></div>
+  <div class="hlist" id="hlist"></div>
+</div>
+
+<div id="cfg">
+  <h2>Ajustes secretos</h2>
+  <div id="step1">
+    <label>Senha</label>
+    <input id="pin" type="tel" inputmode="numeric" placeholder="••••">
+    <div class="btns"><button id="unlock">Entrar</button><button id="close">Fechar</button></div>
+  </div>
+  <div id="step2" style="display:none">
+    <label>Resultado final desejado (a data)</label>
+    <input id="forceval" type="tel" inputmode="numeric" placeholder="14061507">
+    <label>Nova senha (opcional)</label>
+    <input id="newpin" type="tel" inputmode="numeric" placeholder="deixe em branco p/ manter">
+    <div class="btns"><button id="save">Salvar</button><button id="close2">Fechar</button></div>
+    <div class="hint">ARMAR: TOQUE no ícone do relógio (pontinho laranja acende). Segurar o relógio ~1s = histórico.<br>O app calcula sozinho a parcela-ponte; a conta fica verdadeira.<br>Estes ajustes: SEGURE o ícone de cima à direita ~1s. Toque curto nele = menu.</div>
+  </div>
+  <div id="msg"></div>
+</div>
+
+<script>
+(function(){
+  var store={get:function(k,d){try{var v=localStorage.getItem(k);return v===null?d:v;}catch(e){return d;}},
+             set:function(k,v){try{localStorage.setItem(k,v);}catch(e){}}};
+  var targetNum=store.get('mp_force','14061507'), pin=store.get('mp_pin','1234');
+
+  var tokens=[], afterEq=false, grayExpr='', bigResult='0', armed=false;
+  var forcing=false, fDigits='', fIdx=0;
+  var exprBox=document.getElementById('expr'),resBox=document.getElementById('result'),etext=document.getElementById('etext'),rtext=document.getElementById('rtext');
+  var dot=document.getElementById('armbadge'), clr=document.getElementById('clr');
+  var OPS={add:'+',sub:'−',mul:'×',div:'÷'};
+
+  // ---- history ----
+  var live=[]; try{live=JSON.parse(store.get('mp_hist','[]'))||[];}catch(e){live=[];}
+  var demoHoje=[
+    {e:'555.555+12.345.678',r:'12.901.233'},
+    {e:'111.111+222.222+222.222',r:'555.555'},
+    {e:'1.565.004+15.432.641',r:'16.997.645'},
+    {e:'123.564+975.462+465.978',r:'1.565.004'},
+    {e:'17×4',r:'68'},{e:'16,9×4',r:'67,6'},{e:'11×4',r:'44'}
+  ];
+  var demoOntem=[{e:'1.512.742+11.548.679',r:'13.061.421'}];
+
+  function fmtNum(raw){ if(raw==='Erro')return raw;
+    var neg=raw.charAt(0)==='-'; if(neg)raw=raw.slice(1);
+    var p=raw.split(','); var ip=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+    return (neg?'-':'')+ip+(p.length>1?(','+p[1]):''); }
+  function isOp(t){return t==='+'||t==='−'||t==='×'||t==='÷';}
+  function fmtExpr(tk){return tk.map(function(t){return isOp(t)?t:(t===''?'':fmtNum(t));}).join('');}
+  function toNum(s){return parseFloat(String(s).replace(',','.'));}
+  function fromNum(n){ if(!isFinite(n))return 'Erro';
+    var s=String(n); if(s.indexOf('e')>-1)s=n.toFixed(8).replace(/0+$/,'').replace(/\.$/,'');
+    return s.replace('.',','); }
+  function evaluate(tk){ var t=tk.slice(); if(t.length&&(isOp(t[t.length-1])||t[t.length-1]===''))t.pop();
+    if(!t.length)return '0'; var acc=toNum(t[0]);
+    for(var i=1;i<t.length;i+=2){var o=t[i],b=toNum(t[i+1]); if(isNaN(b))break;
+      if(o==='+')acc+=b; else if(o==='−')acc-=b; else if(o==='×')acc*=b; else acc=(b===0?NaN:acc/b);}
+    return fromNum(acc); }
+  function lastIsNumber(){return tokens.length&&!isOp(tokens[tokens.length-1]);}
+  function fit(box,txt,base,min){min=min||28;box.style.fontSize=base+'px';var fs=base;
+    while(txt.scrollWidth>box.clientWidth&&fs>min){fs-=1;box.style.fontSize=fs+'px';}
+    box.classList.toggle('faded',txt.scrollWidth>box.clientWidth+1);}
+  function render(){
+    if(afterEq){
+      etext.textContent=grayExpr; rtext.textContent=fmtNum(bigResult); clr.textContent='AC';
+      fit(resBox,rtext,96,30); fit(exprBox,etext,40,24);
+    } else {
+      etext.textContent=''; rtext.textContent=tokens.length?fmtExpr(tokens):'0';
+      clr.textContent=tokens.length?'C':'AC';
+      fit(resBox,rtext,96,50);
+      exprBox.classList.remove('faded');
+    }
+  }
+  function setArmed(v){armed=v;dot.classList.toggle('on',v);
+    if(v){dot.classList.add('flash');setTimeout(function(){dot.classList.remove('flash');},450);}
+    else{dot.classList.remove('flash');}}
+  function endForce(){forcing=false;fDigits='';fIdx=0;}
+  function logHistory(){ live.unshift({e:grayExpr,r:fmtNum(bigResult)}); if(live.length>40)live.pop();
+    store.set('mp_hist',JSON.stringify(live)); }
+
+  function press(k){
+    if(forcing && '0123456789'.indexOf(k)>-1){
+      if(fIdx<fDigits.length){tokens[tokens.length-1]+=fDigits.charAt(fIdx);fIdx++;} render();return; }
+    if(forcing && k==='comma'){render();return;}
+
+    if('0123456789'.indexOf(k)>-1){
+      if(armed && tokens.length && isOp(tokens[tokens.length-1])){
+        var leftVal=evaluate(tokens);
+        var bridge=Math.round(toNum(targetNum)-toNum(leftVal));
+        fDigits=String(bridge); fIdx=0; forcing=true; setArmed(false);
+        tokens.push('');
+        if(fIdx<fDigits.length){tokens[tokens.length-1]+=fDigits.charAt(fIdx);fIdx++;}
+        render();return;
+      }
+      if(afterEq){tokens=[k];afterEq=false;}
+      else if(!tokens.length||isOp(tokens[tokens.length-1])) tokens.push(k);
+      else{var i=tokens.length-1; if(tokens[i]==='0')tokens[i]=k;
+           else if(tokens[i].replace(/[-,]/g,'').length<12)tokens[i]+=k;}
+    } else if(k==='comma'){
+      if(afterEq){tokens=['0,'];afterEq=false;}
+      else if(!tokens.length||isOp(tokens[tokens.length-1]))tokens.push('0,');
+      else{var j=tokens.length-1; if(tokens[j].indexOf(',')<0)tokens[j]+=',';}
+    } else if(k==='back'){
+      endForce();
+      if(afterEq){afterEq=false;tokens=[bigResult==='Erro'?'0':bigResult];}
+      if(tokens.length&&isOp(tokens[tokens.length-1])){tokens.pop();}
+      else if(lastIsNumber()){var n=tokens.length-1,s=tokens[n].replace(/,$/,'');
+        s=s.length>1?s.slice(0,-1):''; if(s===''||s==='-'){tokens.pop();} else tokens[n]=s;}
+    } else if(k==='clear'){
+      endForce();
+      if(!afterEq&&lastIsNumber()&&tokens[tokens.length-1]!=='0'){tokens[tokens.length-1]='0';}
+      else{tokens=[];afterEq=false;grayExpr='';bigResult='0';setArmed(false);}
+    } else if(k==='sign'){
+      if(afterEq){tokens=[bigResult];afterEq=false;}
+      if(lastIsNumber()){var m=tokens.length-1;tokens[m]=tokens[m].charAt(0)==='-'?tokens[m].slice(1):'-'+tokens[m];}
+    } else if(k==='pct'){
+      if(afterEq){tokens=[bigResult];afterEq=false;}
+      if(lastIsNumber()){var p=tokens.length-1;tokens[p]=fromNum(toNum(tokens[p])/100);}
+    } else if(k==='add'||k==='sub'||k==='mul'||k==='div'){
+      endForce(); var sym=OPS[k];
+      if(afterEq){tokens=[bigResult,sym];afterEq=false;}
+      else if(!tokens.length){tokens=['0',sym];}
+      else if(isOp(tokens[tokens.length-1])){tokens[tokens.length-1]=sym;}
+      else tokens.push(sym);
+    } else if(k==='eq'){
+      endForce();
+      if(!tokens.length&&!afterEq)return;
+      grayExpr=fmtExpr(afterEq?[bigResult]:tokens);
+      bigResult=evaluate(tokens);
+      afterEq=true; logHistory();
+    }
+    render();
+  }
+  document.querySelectorAll('.key').forEach(function(b){
+    b.addEventListener('click',function(){press(b.getAttribute('data-k'));});
+    var on=function(){b.classList.add('pressed');}, off=function(){b.classList.remove('pressed');};
+    b.addEventListener('touchstart',on,{passive:true});
+    b.addEventListener('touchend',off);
+    b.addEventListener('touchcancel',off);
+    b.addEventListener('mousedown',on);
+    b.addEventListener('mouseup',off);
+    b.addEventListener('mouseleave',off);
+  });
+
+  // ---- tap vs hold helper ----
+  function setupHold(el,shortFn,longFn){
+    var t=null,longFired=false,touched=false;
+    function down(){longFired=false;t=setTimeout(function(){longFired=true;t=null;longFn();},800);}
+    function up(){if(t){clearTimeout(t);t=null;} if(!longFired)shortFn();}
+    function cancel(){if(t){clearTimeout(t);t=null;}}
+    el.addEventListener('touchstart',function(){touched=true;down();},{passive:true});
+    el.addEventListener('touchend',function(e){e.preventDefault();up();});
+    el.addEventListener('touchmove',cancel,{passive:true});
+    el.addEventListener('mousedown',function(){if(touched)return;down();});
+    el.addEventListener('mouseup',function(){if(touched){touched=false;return;}up();});
+    el.addEventListener('mouseleave',cancel);
+  }
+
+  // ---- history sheet ----
+  var hist=document.getElementById('hist'), hlist=document.getElementById('hlist');
+  function renderHist(){
+    var html='';
+    var hoje=live.concat(demoHoje);
+    if(hoje.length){ html+='<div class="hsec">Hoje</div>';
+      hoje.forEach(function(x){html+='<div class="hrow"><div class="hexpr">'+x.e+'</div><div class="hres">'+x.r+'</div></div>';}); }
+    if(demoOntem.length){ html+='<div class="hsec">Ontem</div>';
+      demoOntem.forEach(function(x){html+='<div class="hrow"><div class="hexpr">'+x.e+'</div><div class="hres">'+x.r+'</div></div>';}); }
+    hlist.innerHTML=html;
+  }
+  function openHist(){renderHist();hist.classList.add('show');}
+  document.getElementById('histX').onclick=function(){hist.classList.remove('show');};
+  document.getElementById('editBtn').onclick=function(){live=[];store.set('mp_hist','[]');renderHist();};
+
+  // ---- function menu ----
+  var menu=document.getElementById('menu'), menuback=document.getElementById('menuback');
+  function openMenu(){menu.classList.add('show');menuback.classList.add('show');}
+  function closeMenu(){menu.classList.remove('show');menuback.classList.remove('show');}
+  menuback.onclick=closeMenu;
+  document.querySelectorAll('.mitem').forEach(function(m){m.addEventListener('click',closeMenu);});
+
+  // ---- settings ----
+  var cfg=document.getElementById('cfg');
+  function openCfg(){document.getElementById('step1').style.display='block';
+    document.getElementById('step2').style.display='none';
+    document.getElementById('pin').value='';document.getElementById('msg').textContent='';cfg.classList.add('show');}
+  function closeCfg(){cfg.classList.remove('show');}
+  document.getElementById('close').onclick=closeCfg;
+  document.getElementById('close2').onclick=closeCfg;
+  document.getElementById('unlock').onclick=function(){
+    if(document.getElementById('pin').value===pin){
+      document.getElementById('step1').style.display='none';
+      document.getElementById('step2').style.display='block';
+      document.getElementById('forceval').value=targetNum;document.getElementById('msg').textContent='';
+    } else document.getElementById('msg').textContent='Senha incorreta';
+  };
+  document.getElementById('save').onclick=function(){
+    var fv=document.getElementById('forceval').value.replace(/[^0-9]/g,'');
+    if(fv){targetNum=fv;store.set('mp_force',fv);}
+    var np=document.getElementById('newpin').value.replace(/[^0-9]/g,'');
+    if(np){pin=np;store.set('mp_pin',np);}
+    document.getElementById('msg').textContent='Salvo ✓';setTimeout(closeCfg,600);
+  };
+
+  // wire icons: clock => tap:history / hold:arm ; sci => tap:menu / hold:settings
+  setupHold(document.getElementById('histBtn'), function(){setArmed(!armed);}, openHist);
+  setupHold(document.getElementById('sciBtn'), openMenu, openCfg);
+
+  render();
+})();
+</script>
+</body>
+</html>

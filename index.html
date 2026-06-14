@@ -20,8 +20,8 @@ html,body{height:100%;width:100%;background:#000 !important;overflow:hidden;font
 .iconbtn{position:relative;width:46px;height:46px;border-radius:50%;background:#1c1c1e;display:flex;align-items:center;justify-content:center;}
 .iconbtn svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.7;}
 #armbadge{position:absolute;top:1px;right:1px;width:11px;height:11px;border-radius:50%;background:#ff9f0a;opacity:0;transition:opacity .15s,transform .15s;box-shadow:0 0 0 2px #1c1c1e;transform:scale(.6);}
-#armbadge.on{opacity:.85;transform:scale(1);}
-#armbadge.flash{opacity:1;transform:scale(1.35);}
+#armbadge.on{opacity:.4;transform:scale(1);}
+#armbadge.flash{opacity:.75;transform:scale(1.3);}
 .display{flex:1;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;padding:0 26px 10px;overflow:hidden;min-height:120px;}
 #expr{display:flex;justify-content:flex-end;align-items:flex-end;width:100%;overflow:hidden;min-height:46px;color:rgba(255,255,255,.5);font-weight:300;font-size:40px;line-height:1.1;letter-spacing:-1px;}
 #result{display:flex;justify-content:flex-end;align-items:flex-end;width:100%;overflow:hidden;color:#fff;font-weight:300;line-height:1.05;letter-spacing:-2px;font-size:min(13vw,50px);}
@@ -36,7 +36,7 @@ html,body{height:100%;width:100%;background:#000 !important;overflow:hidden;font
 .key.func.pressed{background:#a8a8ac;}
 .key.op.pressed{background:#fcc069;}
 .key svg{width:min(8vw,34px);height:min(8vw,34px);stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;}
-#armdot{position:fixed;left:8px;bottom:8px;width:9px;height:9px;border-radius:50%;background:#ff9f0a;opacity:0;transition:opacity .12s,transform .12s;pointer-events:none;z-index:99;transform:scale(.7);}
+#armdot{position:fixed;left:12px;bottom:calc(env(safe-area-inset-bottom) + 55px);width:10px;height:10px;border-radius:50%;background:#ff9f0a;opacity:0;transition:opacity .12s,transform .12s;pointer-events:none;z-index:99;transform:scale(.7);}
 #armdot.on{opacity:.5;transform:scale(1);}
 #armdot.flash{opacity:.95;transform:scale(1.4);}
 
@@ -127,7 +127,7 @@ html,body{height:100%;width:100%;background:#000 !important;overflow:hidden;font
     <label>Nova senha (opcional)</label>
     <input id="newpin" type="tel" inputmode="numeric" placeholder="deixe em branco p/ manter">
     <div class="btns"><button id="save">Salvar</button><button id="close2">Fechar</button></div>
-    <div class="hint">ARMAR: toque 2x no VISOR (área dos números, acima dos botões). Um pontinho laranja discreto acende no canto inferior esquerdo. Toque no relógio = histórico.<br>O app calcula sozinho a parcela-ponte; a conta fica verdadeira.<br>Estes ajustes: SEGURE o ícone de cima à direita ~1s. Toque curto nele = menu.</div>
+    <div class="hint">ARMAR: toque 2x no VISOR (área dos números, acima dos botões). Um pontinho laranja bem clarinho acende no canto do relógio. Toque no relógio = histórico.<br>O app calcula sozinho a parcela-ponte; a conta fica verdadeira.<br>Estes ajustes: SEGURE o ícone de cima à direita ~1s. Toque curto nele = menu.</div>
   </div>
   <div id="msg"></div>
 </div>
@@ -141,7 +141,7 @@ html,body{height:100%;width:100%;background:#000 !important;overflow:hidden;font
   var tokens=[], afterEq=false, grayExpr='', bigResult='0', armed=false;
   var forcing=false, fDigits='', fIdx=0;
   var exprBox=document.getElementById('expr'),resBox=document.getElementById('result'),etext=document.getElementById('etext'),rtext=document.getElementById('rtext');
-  var dot=document.getElementById('armdot'), clr=document.getElementById('clr');
+  var dot=document.getElementById('armbadge'), clr=document.getElementById('clr');
   var OPS={add:'+',sub:'−',mul:'×',div:'÷'};
 
   // ---- history ----
